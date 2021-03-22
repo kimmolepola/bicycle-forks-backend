@@ -1,0 +1,17 @@
+{
+  "name": "bicycle-forks-backend",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "func start",
+    "test": "echo \"No tests yet...\""
+  },
+  "dependencies": {
+    "apollo-server-azure-functions": "^2.21.2",
+    "graphql": "^15.5.0"
+  },
+  "devDependencies": {},
+  "main": "index.js",
+  "author": "Kimmo Lepola",
+  "license": "ISC",
+  "description": ""
+}
