@@ -1,5 +1,5 @@
 const headers = ['id,brand,model,tapered,diameter,threaded,rake,atoc,brake,blade,steerer,eylets,clearance,axle,steererlength,weight,modelyear,image,imageauthor,vendors',
-  'id,Brand,Model,Tapered,Steerer Tube Diameter (inches),Threaded,Fork Rake/Offset (mm),Axle-to-Crown (A-C) (mm),Brake Mount,Blade Material,Steerer Material,Eylets,Tyre Clearance,Axle Compatibility,Steerer Tube Length,Weight,Model Year,Image,Image Author,Vendors',
+  'id,Brand,Model,Tapered,Steerer\xa0Tube Diameter\xa0(inches),Threaded,Rake/Offset (mm),Axle\u2011to\u2011Crown (A\u2011C) (mm),Brake Mount,Blade Material,Steerer Material,Eylets,Tyre Clearance,Axle Compatibility,Steerer Tube\xa0Length,Weight,Model Year,Image,Image Author,Vendors',
   'text,text,text,boolean,numeric,boolean,numeric,numeric,text,text,text,boolean,numeric,text,numeric,numeric,date, text,text,text',
 ];
 const forks = ['1,8-Bar Bikes,Super Carbon Track Fork,no,1 1/8,no,36,370,Caliper,Carbon,Aluminum,,,,,,,,,',
