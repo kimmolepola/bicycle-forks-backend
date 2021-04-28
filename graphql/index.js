@@ -1,48 +1,36 @@
 const { ApolloServer, gql } = require('apollo-server-azure-functions');
-
-const { forks: forkStringArray, headers: headersStringArray } = require('./forks');
-
-const headers = () => {
-  const headerObjectsArray = [];
-  const headerIds = headersStringArray[0].split(',');
-  const headerNames = headersStringArray[1].split(',');
-  const headerTypes = headersStringArray[2].split(',');
-  for (let i = 0; i < headerIds.length; i += 1) {
-    headerObjectsArray.push({ id: headerIds[i], name: headerNames[i], type: headerTypes[i] });
-  }
-  return headerObjectsArray;
-};
-
-const forks = () => {
-  const headerIds = headersStringArray[0].split(',');
-  const forkObjectArray = [];
-  for (let i = 0; i < forkStringArray.length; i += 1) {
-    const forkArray = forkStringArray[i].split(',');
-    const forkObject = {};
-    for (let ii = 0; ii < headerIds.length; ii += 1) {
-      forkObject[headerIds[ii]] = forkArray[ii];
-    }
-    forkObjectArray.push(forkObject);
-  }
-  return (
-    forkObjectArray
-  );
-};
+const points = require('./points');
 
 // Construct a schema, using GraphQL schema language
 const typeDefs = gql`
+  type Mutation {
+    addPoint(
+      point: String!
+    ): String
+  }
   type Query {
-    forkListHeaders: String
-    allForks: String
+    allPoints: String
     hello: String
   }
 `;
 
 // Provide resolver functions for your schema fields
 const resolvers = {
+  Mutation: {
+    addPoint: async (root, args) => {
+      console.log('start');
+      await new Promise((r) => setTimeout(r, 3000));
+      const newPoint = JSON.parse(args.point);
+      console.log('Mutation "addPoint": ', newPoint);
+      newPoint.id = points.data.previousFeatureId + 1;
+      points.data.previousFeatureId = newPoint.id;
+      points.data.features.push(newPoint);
+      console.log('finish');
+      return 'backend ok';
+    },
+  },
   Query: {
-    forkListHeaders: () => JSON.stringify(headers()),
-    allForks: () => JSON.stringify(forks()),
+    allPoints: () => JSON.stringify(points),
     hello: () => 'hello',
   },
 };
