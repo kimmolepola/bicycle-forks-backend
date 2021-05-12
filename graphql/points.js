@@ -1,42 +1,23 @@
 const points = {
-  type: 'geojson',
-  tolerance: 0,
-  data: {
-    type: 'FeatureCollection',
-    previousFeatureId: 112,
-    features: [
-      {
-        // feature for point A
-        id: 111,
-        type: 'Feature',
-        geometry: {
-          type: 'Point',
-          coordinates: [
-            24.9454,
-            60.1655,
-          ],
-        },
-        properties: {
-          title: 'Point A',
-        },
-      },
-      {
-        // feature for point B
-        id: 112,
-        type: 'Feature',
-        geometry: {
-          type: 'Point',
-          coordinates: [
-            24.9554,
-            60.1755,
-          ],
-        },
-        properties: {
-          title: 'Point B',
-        },
-      },
-    ],
+  previousFeatureId: 112,
+  features: [{
+    id: '111',
+    title: 'Point A',
+    category: 'Category X',
+    type: 'U-rack',
+    groupID: '',
+    lng: 24.9454,
+    lat: 60.1655,
   },
+  {
+    id: '112',
+    title: 'Point B',
+    category: 'Category X',
+    type: 'U-rack',
+    groupID: '',
+    lng: 24.9554,
+    lat: 60.1755,
+  }],
 };
 
 module.exports = points;
