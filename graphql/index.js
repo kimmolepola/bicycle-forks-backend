@@ -78,7 +78,7 @@ const resolvers = {
       return 'point deleted';
     },
     editPoint: (root, args) => {
-      console.log('edit args: ', args);
+      console.log('edit  args: ', args);
       const featureToEdit = points.features.find((x) => x.id === args.id);
       featureToEdit.lng = args.lng;
       featureToEdit.lat = args.lat;
