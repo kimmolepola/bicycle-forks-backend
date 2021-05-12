@@ -90,16 +90,6 @@ const resolvers = {
       return 'point edited';
     },
     addPoint: async (root, args) => {
-      console.log('args: ', args);
-      /*
-      // newPoint = JSON.parse(args.point);
-      const newPoint = { ...args };
-      newPoint.id = (points.previousFeatureId + 1).toString();
-      points.previousFeatureId += 1;
-      points.features.push(newPoint);
-      console.log('points: ', points);
-
-            */
       const point = new Point({ ...args });
       try {
         await point.save();
@@ -108,12 +98,10 @@ const resolvers = {
           invalidArgs: args,
         });
       }
-
       return 'point added';
     },
   },
   Query: {
-    // allPoints: () => points.features,
     allPoints: () => Point.find({}),
     hello: () => 'hello',
   },
