@@ -1,81 +1,60 @@
 const { ApolloServer, gql } = require('apollo-server-azure-functions');
 const mongoose = require('mongoose');
 
-const previousMapboxFeatureIDSchema = new mongoose.Schema({
-  mapboxFeatureID: {
-    type: Number,
+const featureSchema = new mongoose.Schema({
+  _id: {
+    type: String,
     required: true,
-  },
-});
-
-const pointSchema = new mongoose.Schema({
-  mapboxFeatureID: {
-    type: Number,
-    required: true,
-    unique: true,
   },
   title: {
     type: String,
     required: true,
   },
-  category: {
-    type: String,
-  },
   type: {
     type: String,
   },
-  groupID: {
+  geometryType: {
     type: String,
-  },
-  lng: {
-    type: Number,
     required: true,
   },
-  lat: {
-    type: Number,
+  coordinates: {
+    type: [[Number]],
     required: true,
   },
 });
 
-const PreviousMapboxFeatureID = mongoose.model('PreviousMapboxFeatureID', previousMapboxFeatureIDSchema);
-const Point = mongoose.model('Point', pointSchema);
+const Feature = mongoose.model('Feature', featureSchema);
 
 // Construct a schema, using GraphQL schema language
 const typeDefs = gql`
-  type Point {
-    databaseID: ID!
-    mapboxFeatureID: Int!
+  type Feature {
+    id: ID!
     title: String!
-    category: String
     type: String
-    groupID: String
-    lng: Float!
-    lat: Float!
+    geometryType: String!
+    coordinates: [[Float!]!]!
   }
   type Mutation {
-    deletePoint(
-      databaseID: ID!
+    deleteFeature(
+      id: ID!
     ): String
-    editPoint(
-      databaseID: ID!
-      title: String
-      category: String
-      type: String
-      groupID: String
-      lng: Float!
-      lat: Float!
-    ): String
-    addPoint(
+    editFeature(
+      id: ID!
       title: String!
-      category: String
       type: String
-      groupID: String
-      lng: Float!
-      lat: Float!
+      geometryType: String!
+      coordinates: [[Float!]!]!
+    ): String
+    addFeature(
+      id: ID!
+      title: String!
+      type: String
+      geometryType: String!
+      coordinates: [[Float!]!]!
     ): String
   }
   type Query {
-    allPoints: [Point!]!
+    allFeatures: [Feature!]!
     hello: String
   }
 `;
@@ -83,25 +62,26 @@ const typeDefs = gql`
 // Provide resolver functions for your schema fields
 const resolvers = {
   Mutation: {
-    deletePoint: async (root, args) => {
-      await Point.findByIdAndDelete(args.id);
-      return 'point deleted';
+    deleteFeature: async (root, args) => {
+      console.log('delete feature: ', args);
+      await Feature.findByIdAndDelete(args.id);
+      return 'feature deleted';
     },
-    editPoint: async (root, args) => {
-      await Point.findByIdAndUpdate(args.databaseID, args);
-      return 'point edited';
+    editFeature: async (root, args) => {
+      console.log('edit feature: ', args);
+      await Feature.findByIdAndUpdate(args.id, args);
+      return 'feature edited';
     },
-    addPoint: async (root, args) => {
-      let { mapboxFeatureID } = await PreviousMapboxFeatureID.findById('609d1f3d303bc71a5458c7d1');
-      mapboxFeatureID += 1;
-      await PreviousMapboxFeatureID.findByIdAndUpdate('609d1f3d303bc71a5458c7d1', { mapboxFeatureID });
-      const point = new Point({ ...args, mapboxFeatureID });
-      await point.save();
-      return 'point added';
+    addFeature: async (root, args) => {
+      console.log('add feature: ', args);
+      const feature = new Feature({ ...args, _id: args.id });
+      await feature.save();
+      return 'feature added';
     },
   },
+  // aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
   Query: {
-    allPoints: async () => Point.find({}).then((points) => points.map((x) => ({ ...x.toJSON(), databaseID: x.id }))),
+    allFeatures: async () => { const features = await Feature.find({}); console.log('features: ', features); return features; },
     hello: () => 'hello',
   },
 };
