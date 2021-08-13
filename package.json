@@ -1,5 +1,5 @@
 {
-  "name": "bikesafe-backend",
+  "name": "safebike-backend",
   "version": "1.0.0",
   "scripts": {
     "start": "func start",
